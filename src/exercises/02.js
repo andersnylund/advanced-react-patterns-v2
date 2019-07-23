@@ -1,6 +1,13 @@
 // Compound Components
 
-import React from 'react';
+import React from // createContext,
+// useState,
+// useRef,
+// useEffect,
+// useCallback,
+// useMemo,
+// useContext,
+'react';
 import { Switch } from '../switch';
 
 class Toggle extends React.Component {
@@ -45,6 +52,8 @@ class Toggle extends React.Component {
     // 🐨 you'll want to completely replace the code below with the above logic.
     const { on } = this.state;
     const { children } = this.props;
+    // here React.Children.map is used, instead of this.props.map(children => {}) because if
+    // there is only one child to the component it will not be an array
     return React.Children.map(children, child => {
       if (Toggle.compoundComponents.includes(child.type)) {
         return React.cloneElement(child, {
@@ -58,6 +67,63 @@ class Toggle extends React.Component {
   }
 }
 
+// TODO Fix tests
+
+// const ToggleContext = createContext();
+
+// const useEffectAfterMount = (cb, dependencies) => {
+//   const justMounted = useRef(true);
+//   useEffect(() => {
+//     if (!justMounted.current) {
+//       return cb();
+//     }
+//     justMounted.current = false;
+//   }, dependencies);
+// };
+
+// const Toggle = props => {
+//   const [on, setOn] = useState(false);
+//   const toggle = useCallback(() => setOn(oldOn => !oldOn), []);
+//   useEffectAfterMount(() => {
+//     props.onToggle(on);
+//   }, [on]);
+//   const value = useMemo(() => ({ on, toggle }), [on]);
+//   return (
+//     <ToggleContext.Provider value={value}>
+//       {props.children}
+//     </ToggleContext.Provider>
+//   );
+// };
+
+// const useToggleContext = () => {
+//   const context = useContext(ToggleContext);
+//   if (!context) {
+//     throw new Error(
+//       'Toggle compound components cannot be rendered outside the Toggle Component',
+//     );
+//   }
+//   return context;
+// };
+
+// const On = ({ children }) => {
+//   const { on } = useToggleContext();
+//   return on ? children : null;
+// };
+
+// const Off = ({ children }) => {
+//   const { on } = useToggleContext();
+//   return on ? null : children;
+// };
+
+// const Button = props => {
+//   const { on, toggle } = useToggleContext();
+//   return <Switch on={on} onClick={toggle} {...props} />;
+// };
+
+// Toggle.On = On;
+// Toggle.Off = Off;
+// Toggle.Button = Button;
+
 // 💯 Support rendering non-Toggle components within Toggle without incurring warnings in the console.
 // for example, try to render a <span>Hello</span> inside <Toggle />
 
@@ -69,6 +135,7 @@ function Usage({
 }) {
   return (
     <Toggle onToggle={onToggle}>
+      <p>This paragraph should not produce an error</p>
       <Toggle.On>The button is on</Toggle.On>
       <Toggle.Off>The button is off</Toggle.Off>
       <Toggle.Button />

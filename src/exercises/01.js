@@ -1,42 +1,53 @@
 // Building the toggle component
 
-import React from 'react'
+import React, { useState } from 'react';
 // 🐨 uncomment this import to get the switch component.
 // It takes an `onClick` and an `on` prop
-import {Switch} from '../switch'
+import { Switch } from '../switch';
 
-class Toggle extends React.Component {
-  state = {
-    on: false,
-  }
+// class Toggle extends React.Component {
+//   state = {
+//     on: false,
+//   };
 
-  toggle = () => {
-    this.setState(
-      previousState => ({
-        on: !previousState.on,
-      }),
-      () => {
-        const {onToggle} = this.props
-        onToggle(this.state.on)
-      },
-    )
-  }
-  // 🐨 this toggle component is going to need to have state for `on`
-  //
-  // You'll also want a method to handle when the switch is clicked
-  // which will update the `on` state and call the `onToggle` prop
-  // with the new `on` state.
-  //
-  // 💰 this.setState(newState, callback)
-  //
-  // The `callback` should be where you call `this.props.onToggle(this.state.on)`
-  //
-  // 💯 Use a state updater function for `newState` to avoid issues with batching
-  render() {
-    // 🐨 here you'll want to return the switch with the `on` and `onClick` props
-    return <Switch on={this.state.on} onClick={this.toggle} />
-  }
-}
+//   toggle = () => {
+//     this.setState(
+//       previousState => ({
+//         on: !previousState.on,
+//       }),
+//       () => {
+//         const { onToggle } = this.props;
+//         onToggle(this.state.on);
+//       },
+//     );
+//   };
+//   // 🐨 this toggle component is going to need to have state for `on`
+//   //
+//   // You'll also want a method to handle when the switch is clicked
+//   // which will update the `on` state and call the `onToggle` prop
+//   // with the new `on` state.
+//   //
+//   // 💰 this.setState(newState, callback)
+//   //
+//   // The `callback` should be where you call `this.props.onToggle(this.state.on)`
+//   //
+//   // 💯 Use a state updater function for `newState` to avoid issues with batching
+//   render() {
+//     // 🐨 here you'll want to return the switch with the `on` and `onClick` props
+//     return <Switch on={this.state.on} onClick={this.toggle} />;
+//   }
+// }
+
+const Toggle = ({ onToggle }) => {
+  const [on, setOn] = useState(false);
+
+  const toggle = () => {
+    setOn(!on);
+    onToggle(!on);
+  };
+
+  return <Switch on={on} onClick={toggle} />;
+};
 
 // Don't make changes to the Usage component. It's here to show you how your
 // component is intended to be used and is used in the tests.
@@ -44,8 +55,8 @@ class Toggle extends React.Component {
 function Usage({
   onToggle = (...args) => console.log('onToggle', ...args),
 }) {
-  return <Toggle onToggle={onToggle} />
+  return <Toggle onToggle={onToggle} />;
 }
-Usage.title = 'Build Toggle'
+Usage.title = 'Build Toggle';
 
-export {Toggle, Usage as default}
+export { Toggle, Usage as default };
