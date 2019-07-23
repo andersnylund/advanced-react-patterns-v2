@@ -1,9 +1,19 @@
 // Compound Components
 
-import React from 'react'
-import {Switch} from '../switch'
+import React from 'react';
+import { Switch } from '../switch';
 
 class Toggle extends React.Component {
+  static On = props => (props.on ? props.children : null);
+
+  static Off = props => (props.on ? null : props.children);
+
+  static Button = ({ on, toggle }) => (
+    <Switch on={on} onClick={toggle} />
+  );
+
+  static compoundComponents = [Toggle.On, Toggle.Off, Toggle.Button];
+
   // you can create function components as static properties!
   // for example:
   // static Candy = (props) => <div>CANDY! {props.children}</div>
@@ -16,12 +26,12 @@ class Toggle extends React.Component {
   //    be able to accept `on`, `toggle`, and `children` as props.
   //    Note that they will _not_ have access to Toggle instance properties
   //    like `this.state.on` or `this.toggle`.
-  state = {on: false}
+  state = { on: false };
   toggle = () =>
     this.setState(
-      ({on}) => ({on: !on}),
+      ({ on }) => ({ on: !on }),
       () => this.props.onToggle(this.state.on),
-    )
+    );
   render() {
     // we're trying to let people render the components they want within the Toggle component.
     // But the On, Off, and Button components will need access to the internal `on` state as
@@ -33,8 +43,18 @@ class Toggle extends React.Component {
     // 2. React.cloneElement: https://reactjs.org/docs/react-api.html#cloneelement
     //
     // 🐨 you'll want to completely replace the code below with the above logic.
-    const {on} = this.state
-    return <Switch on={on} onClick={this.toggle} />
+    const { on } = this.state;
+    const { children } = this.props;
+    return React.Children.map(children, child => {
+      if (Toggle.compoundComponents.includes(child.type)) {
+        return React.cloneElement(child, {
+          on,
+          toggle: this.toggle,
+        });
+      } else {
+        return child;
+      }
+    });
   }
 }
 
@@ -53,8 +73,8 @@ function Usage({
       <Toggle.Off>The button is off</Toggle.Off>
       <Toggle.Button />
     </Toggle>
-  )
+  );
 }
-Usage.title = 'Compound Components'
+Usage.title = 'Compound Components';
 
-export {Toggle, Usage as default}
+export { Toggle, Usage as default };
