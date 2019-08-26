@@ -19,7 +19,7 @@ class Toggle extends React.Component {
     const { children } = this.props;
     if (typeof children !== 'function') {
       throw new Error(
-        "Toggle component requries a function as it's immediate child (render prop)",
+        "Toggle component requires a function as it's immediate child (render prop)",
       );
     }
     // We want to give rendering flexibility, so we'll be making
@@ -27,7 +27,7 @@ class Toggle extends React.Component {
     // You'll notice the children prop in the Usage component
     // is a function. 🐨 So you can replace this with a call this.props.children()
     // But you'll need to pass it an object with `on` and `toggle`.
-    return this.props.children({ on, toggle: this.toggle });
+    return children({ on, toggle: this.toggle });
   }
 }
 
